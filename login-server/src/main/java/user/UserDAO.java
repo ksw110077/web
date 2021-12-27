@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import util.DBManager;
+
 public class UserDAO {
 	// ctrl + shift + s 전체 저장
 	// DAO(Data Access Object)
@@ -31,28 +33,28 @@ public class UserDAO {
 	private ArrayList<UserDTO> users = null;
 
 	// 3. DB 연동하기
-	public Connection getConnection() {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-
-			String url = "jdbc:mysql://localhost:3306/loginServer?serverTimezone=UTC";
-			String user = "root";
-			String password = "vp$dnl^3020";
-			this.conn = DriverManager.getConnection(url, user, password);
-			if (this.conn != null) {
-				System.out.println("DB연동 성공!");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return this.conn;
-	}
+//	public Connection getConnection() {
+//		try {
+//			Class.forName("com.mysql.cj.jdbc.Driver");
+//
+//			String url = "jdbc:mysql://localhost:3306/loginServer?serverTimezone=UTC";
+//			String user = "root";
+//			String password = "vp$dnl^3020";
+//			this.conn = DriverManager.getConnection(url, user, password);
+//			if (this.conn != null) {
+//				System.out.println("DB연동 성공!");
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return this.conn;
+//	}
 
 	// 4. 연동된 DB에서 데이터 불러오기
 	public ArrayList<UserDTO> getUsers() {
 		this.users = new ArrayList<UserDTO>();
 		try {
-			this.conn = getConnection(); // DB연동하기
+			this.conn = DBManager.getConnection(); // DB연동하기
 			String sql = "select* from users";
 			this.pstmt = this.conn.prepareStatement(sql); // 연동된 DB에 쿼리를 날리 준비
 			this.rs = this.pstmt.executeQuery(); // 쿼리를 날리면서 RsultSet을 반환 받음
@@ -79,18 +81,10 @@ public class UserDAO {
 	// 5. CRUD
 	// ㄴ Create Read Update Delete
 
-	public void addUser(UserDTO user) {
-//		getUsers();
-//		for(int i = 0; i < this.users.size(); i++) {
-//			if(this.users.get(i).getId().equals(user.getId())){
-//				System.out.println("회원가입 실패");
-//				return;
-//			}
-//		}
-//		
+	public boolean addUser(UserDTO user) {
 		if(checkDuplId(user.getId())) {			
 			try {
-				this.conn = getConnection();
+				this.conn = DBManager.getConnection();
 				String sql = "insert into users(id, pw, regDate) values(?, ?, ?)"; // sql 쿼리의 포멧 = ?
 				this.pstmt = this.conn.prepareStatement(sql);
 				this.pstmt.setString(1, user.getId());
@@ -98,47 +92,15 @@ public class UserDAO {
 				this.pstmt.setTimestamp(3, new Timestamp(Calendar.getInstance().getTimeInMillis()));
 				this.pstmt.executeUpdate();
 				System.out.println("회원가입 성공");
+				
+				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		
+		return false;
 	}
-	
-//	public void addUser(UserDTO user) {
-//		try {
-//			this.conn = getConnection();
-//			String sql = "insert into users(id, pw, regDate) values(?, ?, ?)"; // sql 쿼리의 포멧 = ?
-//			if(!chkOverlap(user.getId())) {
-//				this.pstmt = this.conn.prepareStatement(sql);
-//				this.pstmt.setString(1, user.getId());
-//				this.pstmt.setString(2, user.getPw());
-//				this.pstmt.setTimestamp(3, new Timestamp(Calendar.getInstance().getTimeInMillis()));
-//				this.pstmt.executeUpdate();
-//				System.out.println("회원가입 성공");				
-//			}
-//			else {
-//				System.out.println("회원가입 실패");								
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-//
-//	public boolean chkOverlap(String id) {
-//		try {
-//			this.rs = null;
-//			this.conn = getConnection();
-//			String sql = String.format("select * from users where (id = \"%s\");", id);
-//			this.pstmt = this.conn.prepareStatement(sql);
-//			this.rs = this.pstmt.executeQuery();
-//			if(!this.rs.next()) {
-//				return false;
-//			}
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//		}
-//		return true;
-//	}
 	
 	private boolean checkDuplId(String id) {
 		this.users = getUsers();
@@ -150,26 +112,13 @@ public class UserDAO {
 		return true;
 	}
 	
-	// 로그인
-	public UserDTO login(String id, String pw) {
-		System.out.println("로그인 실행");
-		
-		try {
-			this.conn = getConnection();
-			String sql = String.format("select * from users where (id=\"%s\") and (pw=\"%s\");", id, pw);
-			this.pstmt = this.conn.prepareStatement(sql);
-			this.rs = this.pstmt.executeQuery();
-			if(this.rs.next()) {
-				int code = this.rs.getInt(1);
-				String id1 = this.rs.getString(2);
-				String pw1 = this.rs.getString(3);
-				Timestamp regDate = this.rs.getTimestamp(4);
-				UserDTO user = new UserDTO(code, id1, pw1, regDate);
-				return user; // id, pw 중복이라면 첫번째에서 리턴
+	public boolean checkLogin(String id, String pw) {
+		this.users = getUsers();
+		for(UserDTO user : this.users) {
+			if(id.equals(user.getId()) && pw.equals(user.getPw())) {
+				return true;
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}		
-		return null;
+		}
+		return false;
 	}
 }

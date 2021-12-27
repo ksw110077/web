@@ -19,7 +19,7 @@
 		
 		UserDAO dao = UserDAO.getInstance();
 		// 로그인 처리
-		UserDTO user = dao.login(id, pw);
+		UserDTO user = null;
 		if(user != null){
 		session.setAttribute("log", user.getId());
 		System.out.println("session : " + session.getAttribute("log"));
