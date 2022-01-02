@@ -23,10 +23,12 @@
 	if (password.equals(temp.getPassword())) {
 		if (revision == 1) {
 			// 수정
+			System.out.println("revision");
 			response.sendRedirect(String.format("_13_boardUpdateForm.jsp?code=%d", code));
 		}
 		if (delete == 1) {
 			// 삭제
+			System.out.println("delete");
 			response.sendRedirect(String.format("_17_boardDeletePro.jsp?code=%d", code));
 		}
 	} else {

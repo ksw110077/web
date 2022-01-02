@@ -12,7 +12,7 @@ public class DBManager {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			String url = "jdbc:mysql://localhost:3306/loginServer?serverTimezone=UTC";
 			String id = "root";
-			String pw = "vp$dnl^3020";
+			String pw = "root";
 			conn = DriverManager.getConnection(url,id, pw);
 			
 			if(conn != null) {

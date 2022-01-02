@@ -48,7 +48,6 @@ public class BoardDAO {
 		return this.contents;
 	}
 	
-	
 	// CRUD
 
 	// create

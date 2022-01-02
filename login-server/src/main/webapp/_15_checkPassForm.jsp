@@ -37,6 +37,9 @@
 		%>
 		<script type="text/javascript">
 			alert("회원님의 게시글이 아닙니다.");
+			<%
+			System.out.print("회원님의 게시글이 아닙니다.");
+			%>
 		</script>
 		<%
 			response.sendRedirect(String.format("_18_boardView.jsp?code=%d",code));
@@ -47,6 +50,9 @@
 	function checkPw(form){
 		const password = form.password.value;
 		if(password == ""){
+			<%
+			System.out.print("비밀번호를 입력해주세요");
+			%>
 			alert("비밀번호를 입력해주세요");
 		}
 		else {
