@@ -22,12 +22,22 @@
 			Member mem = dao.chkMember(id);
 			String tempPw = mem.getPw();
 			if(pw.equals(tempPw)){
-				
+				dao.delMember(id, pw);
 				session.removeAttribute("log");
+				%>
+				<script type="text/javascript">
+					alert("회원 탈퇴 되셨습니다.");
+				</script>
+				<%
 				response.sendRedirect("01_main.jsp?");
 			}
 			else {
-				
+				%>
+				<script type="text/javascript">
+					alert("비밀번호를 확인하세요");
+				</script>
+				<%
+				response.sendRedirect("01_main.jsp?center=11_withdrawal.jsp");
 			}
 		}
 	%>

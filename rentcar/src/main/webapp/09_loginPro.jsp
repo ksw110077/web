@@ -26,6 +26,10 @@
 				response.sendRedirect("01_main.jsp?center=03_center.jsp");
 			}
 		}
+		else {
+			System.out.println("로그인 실패");
+			response.sendRedirect("01_main.jsp?center=08_login.jsp");
+		}
 	%>
 </body>
 </html>
