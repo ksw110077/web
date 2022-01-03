@@ -19,7 +19,7 @@
 		<span style="width: 150px; text-align: center;"><a class="topMenu" href="#">1번 메뉴</a></span>
 		<span style="width: 150px; text-align: center;"><a class="topMenu" href="#">2번 메뉴</a></span>
 		<span style="width: 150px; text-align: center;"><a class="topMenu" href="#">3번 메뉴</a></span>
-		<span style="width: 150px; text-align: center;"><a class="topMenu" href="#">4번 메뉴</a></span>
+		<span style="width: 150px; text-align: center;"><a class="topMenu" href="01_main.jsp?center=13_boardList.jsp">후기게시판</a></span>
 		<span style="width: 150px; text-align: center;"><a class="topMenu" href="01_main.jsp?center=10_myPage.jsp">마이페이지</a></span>
 		<div cla>
 			<table>

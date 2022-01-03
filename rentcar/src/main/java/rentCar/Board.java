@@ -12,6 +12,7 @@ public class Board {
 		this.title = title;
 		this.content = content;
 		this.id = id;
+		// id 가 member pk 코드는 ?
 		this.password = password;
 		this.date = new Timestamp(Calendar.getInstance().getTimeInMillis());
 	}
@@ -25,6 +26,7 @@ public class Board {
 		this.like = like; // default
 		this.date = date; // 작성 시간? 수정 시간?
 	}
+	
 	public int getCode() {
 		return code;
 	}
